@@ -22,9 +22,10 @@
     {% endif %}
 
     <style>
-      #signInButton { margin: 20px 164px 0; }
-      .modal-body { text-align: center; }
       #errorDisplay { display: none; }
+      .file-mgmt { width: 100%; }
+      .modal-body { text-align: center; }
+      #signInButton { margin: 20px 164px 0; }
     </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -129,7 +130,10 @@
             </div> <!-- /.col-md-10 -->
 
             <div class="col-md-2">
-              <button class="btn btn-success col-md-12" id="saveFile"><i class="fa fa-save"></i> Save</button>
+              <div class="btn-group file-mgmt" role="group">
+                <button type="button" class="btn btn-success col-md-9" id="saveFile"><i class="fa fa-save"></i> Save</button>
+                <button type="button" class="btn btn-danger col-md-3" id="deleteFile"><i class="fa fa-trash"></i></button>
+              </div>
             </div>
           </div>
 

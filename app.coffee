@@ -30,6 +30,10 @@ $ ->
     content = $('#editor').val()
     saveFile(filename, content)
 
+  $('#deleteFile').bind 'click', () ->
+    filename = $('#filename').val()
+    deleteFile(filename)
+
   $('#file-url').bind 'click', () ->
     $(this).select()
 
@@ -94,7 +98,14 @@ saveFile = (filename, content) ->
     Bucket: window.past3_config.bucket
     ContentType: mime.mime
     Key: getFilePrefix() + filename
-  }, saveFileCallback)
+  }, fileActionCallback)
+
+deleteFile = (filename) ->
+  s3 = new AWS.S3()
+  s3.deleteObject({
+    Bucket: window.past3_config.bucket
+    Key: getFilePrefix() + filename
+  }, fileActionCallback)
 
 loadFileIntoEditor = (err, data) ->
   if err
@@ -121,7 +132,7 @@ loadFileList = (err, data) ->
 
     li.appendTo $('#fileList')
 
-saveFileCallback = (err, data) ->
+fileActionCallback = (err, data) ->
   if err
     error err
     return
