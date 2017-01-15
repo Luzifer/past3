@@ -17,6 +17,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
           integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
 
+    {% if bootswatch_theme %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/{{ bootswatch_theme }}/bootstrap.min.css" />
+    {% endif %}
+
     <style>
       #signInButton { margin: 20px 164px 0; }
       .modal-body { text-align: center; }

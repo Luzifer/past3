@@ -22,3 +22,7 @@ region: eu-west-1
 
 # Client ID of the oAuth2 application created in the Google Cloud console
 google_client_id: 693734536874-s0quna7oa2msnt1up4vubi4sh3uaucud.apps.googleusercontent.com
+
+# Theme name (lowercase) of Bootswatch.com theme (Optional, when not
+# specified the original bootstrap theme is used)
+bootswatch_theme: cosmo
