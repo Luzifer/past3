@@ -1,3 +1,8 @@
+# 0.3.0 / 2017-01-15
+
+  * Add file deletion
+  * Ensure loading order to prevent races
+
 # 0.2.0 / 2017-01-15
 
   * Add README and Screenshot
