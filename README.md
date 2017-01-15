@@ -10,7 +10,7 @@ PaS(t)3 is a S3 file editor with Google authentication using Amazon Cognito. It 
   1. Add an oAuth consent screen for your application (API Manager -> Credentials)
   1. Create credentials for a "Web application", add your URL as an "Authorized JavaScript origin"
   1. Put Client Id into the `config.yml`
-1. Create a S3 bucket
+1. Create a S3 bucket and add the CORS policy
 1. Create an Amazon Cognito Federated Identity Pool
   1. Add the policy documented in `cognito_auth_policy.json` as "Authenticated Role"
   1. Set the Google Client ID in the Google+ tab in "Authentication providers"

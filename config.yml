@@ -8,7 +8,7 @@ acl: public-read
 # Base URL for the uploaded files, either S3 download URL or CloudFront
 # distribution URL to which the file path is appended for display in the
 # interface
-base_url: https://s3-eu-west-1.amazonaws.com/past3/
+base_url: https://paste.luzifer.io/
 
 # Theme name (lowercase) of Bootswatch.com theme (Optional, when not
 # specified the original bootstrap theme is used)
