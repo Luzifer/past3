@@ -33,6 +33,16 @@ $ ->
   $('#file-url').bind 'click', () ->
     $(this).select()
 
+  $(window).bind 'hashchange', () ->
+    if window.location.hash.length > 1
+      filename = window.location.hash.substring(1)
+      getFile filename
+
+      $('.file-list-item').removeClass 'active'
+      $(".file-list-item").each () ->
+        if $(this).data('file') == filename
+          $(this).addClass 'active'
+
 signinCallback = (authResult) ->
   if authResult.Zi.id_token
 
@@ -44,6 +54,7 @@ signinCallback = (authResult) ->
     AWS.config.credentials.get () ->
       $('#signin').modal 'hide'
       listFiles()
+      $(window).trigger 'hashchange'
 
 renderButton = () ->
   gapi.signin2.render 'signInButton',
@@ -101,7 +112,7 @@ loadFileList = (err, data) ->
   for obj in data.Contents
     key = obj.Key.replace getFilePrefix(), ''
 
-    li = $("<a href='#' class='list-group-item file-list-item'><span class='badge'></span> #{key}</a>")
+    li = $("<a href='##{key}' class='list-group-item file-list-item'><span class='badge'></span> #{key}</a>")
     li.find('.badge').text formatDate(obj.LastModified)
     li.data 'file', key
 
@@ -109,7 +120,6 @@ loadFileList = (err, data) ->
       li.addClass 'active'
 
     li.appendTo $('#fileList')
-    li.bind 'click', openFileClick
 
 saveFileCallback = (err, data) ->
   if err
@@ -141,14 +151,6 @@ getMimeType = (filename) ->
     mime = CodeMirror.findModeByExtension 'txt'
 
   return mime
-
-openFileClick = () ->
-  getFile $(this).data('file')
-
-  $('.file-list-item').removeClass 'active'
-  $(this).addClass 'active'
-
-  return false
 
 filenameInput = () ->
   setEditorMime $(this).val()
