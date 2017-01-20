@@ -49,11 +49,18 @@ $ ->
 
 signinCallback = (authResult) ->
   if authResult.Zi.id_token
+    getAWSCredentials authResult.Zi.id_token
 
+    window.past3_credential_refresh = window.setInterval () ->
+      if new Date(AWS.config.credentials.expireTime - 300000) < new Date()
+        refreshGoogleLogin()
+    , 10000
+
+getAWSCredentials = (googleIDToken) ->
     AWS.config.credentials = new AWS.CognitoIdentityCredentials
       IdentityPoolId: window.past3_config.identity_pool_id
       Logins:
-        'accounts.google.com': authResult.Zi.id_token
+        'accounts.google.com': googleIDToken
 
     AWS.config.credentials.get () ->
       $('#signin').modal 'hide'
@@ -172,3 +179,8 @@ error = (err) ->
   ed = $('#errorDisplay')
   ed.find('.alert').text err
   ed.show()
+
+refreshGoogleLogin = () ->
+  console.log "Refreshing Google login / AWS credentials to keep editor working"
+  gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse().then (data) ->
+    getAWSCredentials data.id_token
