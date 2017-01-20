@@ -1,3 +1,7 @@
+# 0.4.0 / 2017-01-21
+
+  * Auto-refresh AWS credentials to prevent save errors
+
 # 0.3.0 / 2017-01-15
 
   * Add file deletion
