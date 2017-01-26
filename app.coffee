@@ -58,6 +58,11 @@ $ ->
       e.preventDefault()
       return false
 
+    if (e.metaKey or e.ctrlKey) and e.keyCode == 82 # cmd+r / ctrl+r
+      listFiles()
+      e.preventDefault()
+      return false
+
 signinCallback = (authResult) ->
   if authResult.Zi.id_token
     getAWSCredentials authResult.Zi.id_token
