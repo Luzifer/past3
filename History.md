@@ -1,3 +1,8 @@
+# 0.5.0 / 2017-01-26
+
+  * Bind ctrl+r to refresh file list instead of reload window
+  * Bind ctrl+s / ctrl+n to buttons
+
 # 0.4.0 / 2017-01-21
 
   * Auto-refresh AWS credentials to prevent save errors
