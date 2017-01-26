@@ -47,6 +47,17 @@ $ ->
         if $(this).data('file') == filename
           $(this).addClass 'active'
 
+  $(window).bind 'keydown', (e) ->
+    if (e.metaKey or e.ctrlKey) and e.keyCode == 83 # cmd+s / ctrl+s
+      $('#saveFile').trigger 'click'
+      e.preventDefault()
+      return false
+
+    if (e.metaKey or e.ctrlKey) and e.keyCode == 78 # cmd+n / ctrl+n
+      $('#newFile').trigger 'click'
+      e.preventDefault()
+      return false
+
 signinCallback = (authResult) ->
   if authResult.Zi.id_token
     getAWSCredentials authResult.Zi.id_token
