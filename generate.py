@@ -7,5 +7,4 @@ config = yaml.load(open('config.yml', 'r').read())
 
 env = Environment(loader=FileSystemLoader('./'))
 template = env.get_template('index.html')
-print(template.render(config))
-
+print(template.render({'config': config}))

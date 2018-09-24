@@ -1,3 +1,4 @@
+const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const dateFormat = 'YYYY-MM-DD HH:mm:ss'
 
 // showAlert creates an alert message and displays it
@@ -47,9 +48,8 @@ function fileActionCallback(err, data) {
 }
 
 // filenameInput is the callback for changes in the filename
-function filenameInput() {
-  setEditorMime($(this).val())
-  $('#file-url').val(window.past3_config.base_url + getFilePrefix() + $(this).val())
+function filenameInput(e) {
+  updateFileURL()
 }
 
 // formatDate formats a Date() object into iso-like format
@@ -95,8 +95,26 @@ function getFile(filename) {
     Key: getFilePrefix() + filename,
   }, loadFileIntoEditor)
 
+  // Check whether the file is public
+  s3.getObjectAcl({
+    Bucket: window.past3_config.bucket,
+    Key: getFilePrefix() + filename,
+  }, (err, data) => {
+    if (err) return error(err)
+
+    for (let grant of data.Grants) {
+      if (grant.Grantee.Type == "Group" && grant.Grantee.URI == allUsersURI) {
+        $('#acl').data('public', true)
+        return updateFileURL()
+      }
+    }
+
+    $('#acl').data('public', false)
+    return updateFileURL()
+  })
+
   $('#filename').val(filename)
-  $('#filename').trigger('input')
+  updateFileURL()
 }
 
 // getFilePrefix retrieves the file prefix using the Cognito identityId
@@ -165,7 +183,17 @@ function init() {
     if (cf) cf.find('i').removeClass('fa-file').addClass('fa-file-upload')
   })
 
+  $('#acl').data('public', window.past3_config.default_public)
+
   // Set up bindings
+  $('#acl').bind('click', (e) => {
+    let el = $(e.target)
+    el.data('public', !el.data('public'))
+
+    updateFileURL()
+    return false
+  })
+
   $('#filename').bind('input', filenameInput)
 
   $('#newFile').bind('click', () => {
@@ -212,6 +240,12 @@ function init() {
 
     if ((e.metaKey || e.ctrlKey) && e.keyCode == 82) { // cmd + r / ctrl + r
       listFiles()
+      e.preventDefault()
+      return false
+    }
+
+    if ((e.metaKey || e.ctrlKey) && e.keyCode == 76) { // cmd + l / ctrl + l
+      $('#acl').trigger('click')
       e.preventDefault()
       return false
     }
@@ -274,9 +308,11 @@ function loadFileList(err, data) {
       fileIcon = 'file'
     }
 
-    let li = $(`<a href='#${key}' class='list-group-item file-list-item'><span class='badge'></span> <i class="fas fa-fw fa-${fileIcon}"></i> ${key}</a>`)
-    li.find('.badge').text(`${formatDate(obj.LastModified)}`)
+    let li = $(`<a href='#${key}' class='list-group-item file-list-item d-flex justify-content-between align-items-center'><span><i class="fas fa-fw fa-${fileIcon}"></i> ${key}</span></a>`)
     li.data('file', key)
+
+    let badge = $(`<span class='badge badge-dark badge-pill'>${formatDate(obj.LastModified)}</span>`)
+    badge.appendTo(li)
 
     if (key === $('#filename').val()) {
       li.addClass('active')
@@ -308,13 +344,16 @@ function renderButton() {
 // saveFile saves the editor content into the S3 bucket
 function saveFile(filename, content) {
   let mime = getMimeType(filename)
+  let pub = $('#acl').data('public')
+
   let s3 = new AWS.S3()
   s3.putObject({
-    ACL: window.past3_config.acl,
+    ACL: pub ? 'public-read' : 'private',
     Body: content,
     Bucket: window.past3_config.bucket,
     ContentType: mime.mime,
     Key: getFilePrefix() + filename,
+    ServerSideEncryption: 'AES256',
   }, saveFileCallback)
 }
 
@@ -339,7 +378,7 @@ function setEditorMime(filename) {
     let autoMime = getMimeType(filename)
     window.editor.setOption('mode', autoMime.mime)
     CodeMirror.autoLoadMode(window.editor, autoMime.mode)
-  }, 500)
+  }, 100)
 }
 
 // signinCallback is triggered by the Google sign-in button
@@ -352,6 +391,22 @@ function signinCallback(authResult) {
         refreshGoogleLogin()
       }
     }, 10000)
+  }
+}
+
+// updateFileURL sets the public URL of the file and adjusts the ACL button
+function updateFileURL() {
+  let pub = $('#acl').data('public')
+  let filename = $('#filename').val()
+
+  setEditorMime(filename)
+
+  if (pub) {
+    $('#file-url').val(window.past3_config.base_url + getFilePrefix() + filename)
+    $('#acl').find('i').removeClass('fa-unlock').addClass('fa-lock')
+  } else {
+    $('#file-url').val('File is private, no URL available')
+    $('#acl').find('i').removeClass('fa-lock').addClass('fa-unlock')
   }
 }
 

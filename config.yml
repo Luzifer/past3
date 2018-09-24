@@ -1,9 +1,8 @@
 ---
 
-# Canned ACL for files stored into S3. One of "private, public-read,
-# public-read-write, authenticated-read, aws-exec-read, bucket-owner-read,
-# bucket-owner-full-control"
-acl: public-read
+# Default acl setting for new files: If set to true the files are created
+# using `public-read` acl, if set to false they are created with `private` acl.
+default_public: true
 
 # Base URL for the uploaded files, either S3 download URL or CloudFront
 # distribution URL to which the file path is appended for display in the
@@ -12,7 +11,7 @@ base_url: https://paste.luzifer.io/
 
 # Theme name (lowercase) of Bootswatch.com theme (Optional, when not
 # specified the original bootstrap theme is used)
-bootswatch_theme: cosmo
+bootswatch_theme: flatly
 
 # Name of the Bucket used to store the files in. The bucket needs to be
 # whitelisted for Cognito authenticated users
