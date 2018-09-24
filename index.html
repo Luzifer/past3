@@ -4,38 +4,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>PaS(t)3 - S3 file editor</title>
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/codemirror.min.css"
-          integrity="sha256-B4lcRQIA/hXjqRxuZHImRuHmb0IT1kscrY9mYJ7FsMs=" crossorigin="anonymous" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-          integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
 
     {% if bootswatch_theme %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/{{ bootswatch_theme }}/bootstrap.min.css" />
+    {% else %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous" />
     {% endif %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.2/codemirror.min.css"
+          integrity="sha256-I8NyGs4wjbMuBSUE40o55W6k6P7tu/7G28/JGUUYCIs=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" 
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     <style>
       .file-mgmt { width: 100%; }
       .modal-body { text-align: center; }
       #signInButton { margin: 20px 164px 0; }
     </style>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"
-              integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g="
-              crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"
-              integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE="
-              crossorigin="anonymous"></script>
-    <![endif]-->
 
     <!-- Sign-In with Google -->
     <meta name="google-signin-client_id" content="{{ google_client_id }}">
@@ -53,29 +41,10 @@
   <body>
     <!-- NAV -->
     <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">
-            <i class="fa fa-clipboard"></i>
-            Pa<em>S(t)<strong>3</strong></em>
-          </a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-fw fa-clipboard-list"></i>
+        Pa<em>S(t)<strong>3</strong></em>
+      </a>
     </nav>
 
     <div class="container-fluid">
@@ -85,7 +54,7 @@
         <div class="col-md-3">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <i class="fa fa-files-o"></i> Files in your namespace
+              <i class="fas fa-fw fa-file"></i> Files in your namespace
             </div>
             <div class="panel-body">
 
@@ -107,14 +76,14 @@
             <div class="col-md-10">
               <div class="form-group">
                 <div class="input-group">
-                  <div class="input-group-addon"><i class="fa fa-tag"></i> Filename</div>
+                  <div class="input-group-addon"><i class="fas fa-fw fa-tag"></i> Filename</div>
                   <input type="text" class="form-control" id="filename" placeholder="untitled">
                 </div>
               </div>
             </div> <!-- /.col-md-10 -->
 
             <div class="col-md-2">
-              <button class="btn btn-default col-md-12" id="newFile"><i class="fa fa-file-o"></i> New File</button>
+              <button class="btn btn-default col-md-12" id="newFile"><i class="fas fa-fw fa-file"></i> New File</button>
             </div>
           </div>
 
@@ -122,7 +91,7 @@
             <div class="col-md-10">
               <div class="form-group">
                 <div class="input-group">
-                  <div class="input-group-addon"><i class="fa fa-link"></i> File-URL</div>
+                  <div class="input-group-addon"><i class="fas fa-fw fa-link"></i> File-URL</div>
                   <input type="text" class="form-control" id="file-url" placeholder="n/a" readonly>
                 </div>
               </div>
@@ -130,8 +99,8 @@
 
             <div class="col-md-2">
               <div class="btn-group file-mgmt" role="group">
-                <button type="button" class="btn btn-success col-md-9" id="saveFile"><i class="fa fa-save"></i> Save</button>
-                <button type="button" class="btn btn-danger col-md-3" id="deleteFile"><i class="fa fa-trash"></i></button>
+                <button type="button" class="btn btn-success col-md-9" id="saveFile"><i class="fas fa-fw fa-save"></i> Save</button>
+                <button type="button" class="btn btn-danger col-md-3" id="deleteFile"><i class="fas fa-fw fa-trash"></i></button>
               </div>
             </div>
           </div>
@@ -145,7 +114,7 @@
 
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <i class="fa fa-file-text-o"></i> File content
+                  <i class="fas fa-fw fa-file-alt"></i> File content
                 </div>
                 <div class="panel-body">
                   <textarea style="height:100%;width:100%;" id="editor"></textarea>
@@ -179,22 +148,24 @@
     <a href="https://github.com/Luzifer/past3" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"
-            integrity="sha256-YVu3IT7nGTfxru7MQiv/TgOnffsbPuvXHRXuw1KzxWc=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.7.21/aws-sdk.min.js"
-            integrity="sha256-hfu3qznG/BXuwrZTPWpq3eDm+eh6aao1eQMMSXgGYNg=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"
+            integrity="sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k=" crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/codemirror.min.js"
-            integrity="sha256-pWigXb2fd8JQ4vx4hmK0s9m7u3z219t7tjcnmn76yd8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/addon/mode/loadmode.min.js"
-            integrity="sha256-bUg7jjJLHxp1tOgz4DdCaa/G3AQTx1RXhDHaz8y9bDA=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/mode/meta.min.js"
-            integrity="sha256-Q7TtpA3J4bkPZpylepA+IKKsUn0lfkek+EPrddqC1Lo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.320.0/aws-sdk.min.js"
+            integrity="sha256-Yz6bx7+bZiZo2xpUubQIftoUNZA4GX7ryPJtmBH1CHk=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.2/codemirror.min.js"
+            integrity="sha256-hY4lHTn7c3QSwGpgxj3OAYynw9Etpx530BNJHTmhvYA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.2/addon/mode/loadmode.min.js"
+            integrity="sha256-lV0GDqbsqZWyDhAX82N2eYbx+qydYmXOitWgRqQI9Ao=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.2/mode/meta.min.js"
+            integrity="sha256-+YoTLm1iuD8g9GwmNrGt+xLBvrfbd2B+6C38qtkNE28=" crossorigin="anonymous"></script>
 
     <script src="app.js"></script>
     <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>

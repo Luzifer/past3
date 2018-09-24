@@ -1,4 +1,4 @@
-const dateFormat = 'yyyy-MM-dd HH:mm:ss'
+const dateFormat = 'YYYY-MM-DD HH:mm:ss'
 
 // showAlert creates an alert message and displays it
 function showAlert(type, msg, timeout = 0, actions = {}) {
@@ -52,7 +52,7 @@ function filenameInput() {
 
 // formatDate formats a Date() object into iso-like format
 function formatDate(src) {
-  return $.format.date(src, dateFormat)
+  return moment(src).format(dateFormat)
 }
 
 // getAWSCredentials retrieves AWS credentials via Cognito using the Google ID Token
@@ -251,12 +251,12 @@ function loadFileList(err, data) {
   for (let obj of data.Contents) {
     let key = obj.Key.replace(getFilePrefix(), '')
 
-    let fileIcon = 'file-text-o'
+    let fileIcon = 'file-alt'
     if (window.localStorage.getItem(key) !== null) {
-      fileIcon = 'file-text'
+      fileIcon = 'file-signature'
     }
 
-    let li = $(`<a href='#${key}' class='list-group-item file-list-item'><span class='badge'></span> <i class="fa fa-${fileIcon}"></i> ${key}</a>`)
+    let li = $(`<a href='#${key}' class='list-group-item file-list-item'><span class='badge'></span> <i class="fas fa-fw fa-${fileIcon}"></i> ${key}</a>`)
     li.find('.badge').text(`${formatDate(obj.LastModified)}`)
     li.data('file', key)
 
