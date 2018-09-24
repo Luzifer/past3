@@ -3,9 +3,8 @@ default: generate
 generate: script index-page
 
 script: public
-	coffee --bare --compile --output public app.coffee
-	python -m jsmin public/app.js > public/app.min.js
-	mv public/app.min.js public/app.js
+	docker run --rm -ti -v $(CURDIR):$(CURDIR) -w $(CURDIR) node:alpine \
+		sh -exc "npm ci && npx coffee -t -c -o public/app.js app.coffee && chown -R $(shell id -u) public && rm -rf node_modules"
 
 index-page: public
 	./generate.py > public/index.html
