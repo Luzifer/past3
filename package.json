@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "internal": true,
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-minify": "^0.4.3",
-    "coffeescript": "^2.3.1"
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-preset-minify": "^0.5.0"
   }
 }
