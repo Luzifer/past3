@@ -1,3 +1,26 @@
+const dateFormat = 'yyyy-MM-dd HH:mm:ss'
+
+// showAlert creates an alert message and displays it
+function showAlert(type, msg, timeout = 0, actions = {}) {
+  let alrt = $(`<div class="alert alert-${type} alert-dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button> ${msg} </div>`)
+
+  for (let key in actions) {
+    let lnk = $(`<a href="#" class="alert-link">${key}</a>`)
+    lnk.bind('click', (e) => {
+      actions[key]()
+      $(e.target).parents('.alert').alert('close')
+      return false
+    })
+    lnk.appendTo(alrt)
+  }
+
+  alrt.appendTo($('#errorDisplay'))
+
+  if (timeout > 0) {
+    window.setTimeout(() => alrt.alert('close'), timeout)
+  }
+}
+
 // deleteFile removes the specified file from the AWS bucket
 function deleteFile(filename) {
   let s3 = new AWS.S3()
@@ -9,9 +32,7 @@ function deleteFile(filename) {
 
 // error displays the error in the frontend
 function error(err) {
-  let ed = $('#errorDisplay')
-  ed.find('.alert').text(err)
-  ed.show()
+  showAlert('danger', err, 0)
 }
 
 // fileActionCallback is used to trigger a reload of the file list
@@ -31,7 +52,7 @@ function filenameInput() {
 
 // formatDate formats a Date() object into iso-like format
 function formatDate(src) {
-  return $.format.date(src, 'yyyy-MM-dd HH:mm:ss')
+  return $.format.date(src, dateFormat)
 }
 
 // getAWSCredentials retrieves AWS credentials via Cognito using the Google ID Token
@@ -83,6 +104,11 @@ function getMimeType(filename) {
   return mime
 }
 
+// info displays the info in the frontend
+function info(msg) {
+  showAlert('info', msg, 10000)
+}
+
 // init initializes the interface with its listeners
 function init() {
   // Show sign-in modal
@@ -104,6 +130,21 @@ function init() {
     viewportMargin: 25,
   })
   window.editor.setSize(null, '100%')
+  window.editor.on('change', (cm, change) => {
+    if (change.origin === 'setValue') {
+      // Do not cache file when a set was done
+      return
+    }
+
+    // Store a local copy
+    let filename = $('#filename').val()
+    if (filename !== '') {
+      window.localStorage.setItem(filename, JSON.stringify({
+        date: new Date(),
+        text: btoa(cm.getValue()),
+      }))
+    }
+  })
 
   // Set up bindings
   $('#filename').bind('input', filenameInput)
@@ -176,6 +217,27 @@ function loadFileIntoEditor(err, data) {
     return error(err)
   }
 
+  let lastModified = new Date(data.LastModified)
+  let cached = window.localStorage.getItem($('#filename').val())
+
+  if (cached !== null) {
+    let cd = JSON.parse(cached)
+    let cdChange = new Date(cd.date)
+    if (lastModified < cdChange) {
+      window.editor.setValue(atob(cd.text))
+      showAlert('info', `Recovered working copy stored ${formatDate(cdChange)}`, 10000, {
+        'Dismiss working copy': () => {
+          window.localStorage.removeItem($('#filename').val())
+          getFile($('#filename').val())
+          listFiles()
+
+          return false
+        },
+      })
+      return
+    }
+  }
+
   window.editor.setValue(String(data.Body))
 }
 
@@ -189,8 +251,13 @@ function loadFileList(err, data) {
   for (let obj of data.Contents) {
     let key = obj.Key.replace(getFilePrefix(), '')
 
-    let li = $(`<a href='#${key}' class='list-group-item file-list-item'><span class='badge'></span> ${key}</a>`)
-    li.find('.badge').text(formatDate(obj.LastModified))
+    let fileIcon = 'file-text-o'
+    if (window.localStorage.getItem(key) !== null) {
+      fileIcon = 'file-text'
+    }
+
+    let li = $(`<a href='#${key}' class='list-group-item file-list-item'><span class='badge'></span> <i class="fa fa-${fileIcon}"></i> ${key}</a>`)
+    li.find('.badge').text(`${formatDate(obj.LastModified)}`)
     li.data('file', key)
 
     if (key === $('#filename').val()) {
@@ -230,7 +297,18 @@ function saveFile(filename, content) {
     Bucket: window.past3_config.bucket,
     ContentType: mime.mime,
     Key: getFilePrefix() + filename,
-  }, fileActionCallback)
+  }, saveFileCallback)
+}
+
+// saveFileCallback is triggered after a file save and removes the local copy of the file
+function saveFileCallback(err, data) {
+  if (err) {
+    return error(err)
+  }
+
+  window.localStorage.removeItem($('#filename').val())
+
+  fileActionCallback(err, data)
 }
 
 // setEditorMime updates the mime type of the file content loaded into the editor
