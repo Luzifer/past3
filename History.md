@@ -1,3 +1,9 @@
+# 0.6.0 / 2018-09-24
+
+  * Store changed documents locally to prevent data loss on reload
+  * Port application to pure Javascript
+  * Use babel to minify and transpile
+
 # 0.5.0 / 2017-01-26
 
   * Bind ctrl+r to refresh file list instead of reload window
