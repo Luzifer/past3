@@ -165,7 +165,7 @@ function init() {
 
   $('#deleteFile').bind('click', () => deleteFile($('#filename').val()))
 
-  $('#file-url').bind('click', () => $(this).select())
+  $('#file-url').bind('click', (e) => $(e.target).select())
 
   $(window).bind('hashchange', () => {
     if (window.location.hash.length > 1) {
