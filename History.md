@@ -1,3 +1,11 @@
+# 0.7.0 / 2018-09-25
+
+  * Slightly increase font size of editor
+  * Fix remaining BS4 update, add private files feature
+  * Some small UX improvements
+  * Fix: Select file URL on click
+  * Update dependencies
+
 # 0.6.0 / 2018-09-24
 
   * Store changed documents locally to prevent data loss on reload
