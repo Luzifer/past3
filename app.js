@@ -28,6 +28,8 @@ function deleteFile(filename) {
     Bucket: window.past3_config.bucket,
     Key: getFilePrefix() + filename,
   }, fileActionCallback)
+
+  window.localStorage.removeItem(filename)
 }
 
 // error displays the error in the frontend
@@ -69,6 +71,20 @@ function getAWSCredentials(googleIDToken) {
     listFiles()
     $(window).trigger('hashchange')
   })
+}
+
+// getCurrentFileListEntry returns the element of the currently loaded file list entry
+function getCurrentFileListEntry() {
+  let filename = $('#filename').val()
+  let resp = null
+
+  $(".file-list-item").each((idx, e) => {
+    if ($(e).data('file') === filename) {
+      resp = $(e)
+    }
+  })
+
+  return resp
 }
 
 // getFile retrieves an object from the bucket and loads it into the editor
@@ -144,6 +160,9 @@ function init() {
         text: btoa(cm.getValue()),
       }))
     }
+
+    let cf = getCurrentFileListEntry()
+    if (cf) cf.find('i').removeClass('fa-file').addClass('fa-file-upload')
   })
 
   // Set up bindings
@@ -173,11 +192,8 @@ function init() {
       getFile(filename)
 
       $('.file-list-item').removeClass('active')
-      $(".file-list-item").each(() => {
-        if ($(this).data('file') == filename) {
-          $(this).addClass('active')
-        }
-      })
+      let cf = getCurrentFileListEntry()
+      if (cf) cf.addClass('active')
     }
   })
 
@@ -253,7 +269,9 @@ function loadFileList(err, data) {
 
     let fileIcon = 'file-alt'
     if (window.localStorage.getItem(key) !== null) {
-      fileIcon = 'file-signature'
+      fileIcon = 'file-upload'
+    } else if (obj.Size === 0) {
+      fileIcon = 'file'
     }
 
     let li = $(`<a href='#${key}' class='list-group-item file-list-item'><span class='badge'></span> <i class="fas fa-fw fa-${fileIcon}"></i> ${key}</a>`)
