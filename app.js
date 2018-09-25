@@ -138,6 +138,28 @@ function getMimeType(filename) {
   return mime
 }
 
+// getPublicURL returns the public URL of the file. If the file is private and
+// the signed parameter is set to true a presigned URL will be created
+function getPublicURL(signed = false) {
+  let pub = $('#acl').data('public')
+  let filename = $('#filename').val()
+
+  if (pub) {
+    return window.past3_config.base_url + getFilePrefix() + filename
+  }
+
+  if (signed) {
+    let s3 = new AWS.S3()
+    return s3.getSignedUrl('getObject', {
+      Bucket: window.past3_config.bucket,
+      Expires: window.past3_config.private_share_expiry,
+      Key: getFilePrefix() + filename,
+    })
+  }
+
+  return 'File is private, no URL available'
+}
+
 // info displays the info in the frontend
 function info(msg) {
   showAlert('info', msg, 10000)
@@ -248,6 +270,12 @@ function init() {
       $('#acl').trigger('click')
       e.preventDefault()
       return false
+    }
+  })
+
+  new ClipboardJS('#copyURL', {
+    text: () => {
+      return getPublicURL(true)
     }
   })
 }
@@ -401,11 +429,11 @@ function updateFileURL() {
 
   setEditorMime(filename)
 
+  $('#file-url').val(getPublicURL(false))
+
   if (pub) {
-    $('#file-url').val(window.past3_config.base_url + getFilePrefix() + filename)
     $('#acl').find('i').removeClass('fa-unlock').addClass('fa-lock')
   } else {
-    $('#file-url').val('File is private, no URL available')
     $('#acl').find('i').removeClass('fa-lock').addClass('fa-unlock')
   }
 }

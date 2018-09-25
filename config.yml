@@ -25,3 +25,7 @@ identity_pool_id: 'eu-west-1:8605f42e-f1e2-4c71-a796-a96ed9e79930'
 
 # AWS region of the bucket
 region: eu-west-1
+
+# Expiry in seconds set on pre-signed URLs for private files
+# Minimum is 1s, maximum 604800s (seven days)
+private_share_expiry: 900
