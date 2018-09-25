@@ -1,3 +1,7 @@
+# 0.8.0 / 2018-09-25
+
+  * Allow sharing private files through pre-signed URLs
+
 # 0.7.0 / 2018-09-25
 
   * Slightly increase font size of editor
