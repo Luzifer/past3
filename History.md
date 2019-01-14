@@ -1,3 +1,7 @@
+# 0.9.1 / 2019-01-14
+
+  * Fix: Do not set cache-control but request it
+
 # 0.9.0 / 2019-01-14
 
   * Add upload-script
