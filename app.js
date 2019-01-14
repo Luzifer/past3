@@ -1,5 +1,6 @@
 const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const dateFormat = 'YYYY-MM-DD HH:mm:ss'
+const defaultCacheControl = 'no-cache'
 
 // showAlert creates an alert message and displays it
 function showAlert(type, msg, timeout = 0, actions = {}) {
@@ -379,6 +380,7 @@ function saveFile(filename, content) {
     ACL: pub ? 'public-read' : 'private',
     Body: content,
     Bucket: window.past3_config.bucket,
+    CacheControl: defaultCacheControl,
     ContentType: mime.mime,
     Key: getFilePrefix() + filename,
     ServerSideEncryption: 'AES256',
