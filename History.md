@@ -1,3 +1,9 @@
+# 0.9.0 / 2019-01-14
+
+  * Add upload-script
+  * Script can run under python3
+  * Set cache-control to prevent browser caching
+
 # 0.8.0 / 2018-09-25
 
   * Allow sharing private files through pre-signed URLs
