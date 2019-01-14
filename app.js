@@ -94,6 +94,7 @@ function getFile(filename) {
   s3.getObject({
     Bucket: window.past3_config.bucket,
     Key: getFilePrefix() + filename,
+    ResponseCacheControl: defaultCacheControl,
   }, loadFileIntoEditor)
 
   // Check whether the file is public
@@ -380,7 +381,6 @@ function saveFile(filename, content) {
     ACL: pub ? 'public-read' : 'private',
     Body: content,
     Bucket: window.past3_config.bucket,
-    CacheControl: defaultCacheControl,
     ContentType: mime.mime,
     Key: getFilePrefix() + filename,
     ServerSideEncryption: 'AES256',
