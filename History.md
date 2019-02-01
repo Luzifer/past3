@@ -1,3 +1,7 @@
+# 0.10.0 / 2019-02-01
+
+  * Replace CDNJS with jsDelivr
+
 # 0.9.1 / 2019-01-14
 
   * Fix: Do not set cache-control but request it
