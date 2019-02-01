@@ -1,4 +1,5 @@
 const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
+const codemirrorModeURL = 'https://cdn.jsdelivr.net/npm/codemirror@5.43.0/mode/%N/%N.js'
 const dateFormat = 'YYYY-MM-DD HH:mm:ss'
 const defaultCacheControl = 'no-cache'
 
@@ -177,7 +178,7 @@ function init() {
 
   // Configure AWS and CodeMirror
   AWS.config.region = window.past3_config.region
-  CodeMirror.modeURL = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/mode/%N/%N.js'
+  CodeMirror.modeURL = codemirrorModeURL
 
   // Initialize the editor
   window.editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
