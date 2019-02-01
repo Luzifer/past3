@@ -1,3 +1,7 @@
+# 0.10.1 / 2019-02-01
+
+  * Fix: Include the dist version of AWS SDK
+
 # 0.10.0 / 2019-02-01
 
   * Replace CDNJS with jsDelivr
