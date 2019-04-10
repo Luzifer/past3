@@ -3,7 +3,7 @@
 import yaml
 from jinja2 import Environment, FileSystemLoader
 
-config = yaml.load(open('config.yml', 'r').read())
+config = yaml.load(open('config.yml', 'r').read(), Loader=yaml.SafeLoader)
 
 env = Environment(loader=FileSystemLoader('./'))
 template = env.get_template('index.html')
